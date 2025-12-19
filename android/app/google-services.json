@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "809963843236",
+    "project_id": "inlet-925d1",
+    "storage_bucket": "inlet-925d1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809963843236:android:6fdf7018c3bc9a6aa50031",
+        "android_client_info": {
+          "package_name": "com.example.inlet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdlYXkbNx8HyHnMCzV33D-20T20rBTKq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
