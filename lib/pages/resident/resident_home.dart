@@ -10,30 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../notice_card.dart';
 import '../../services/fcm_service.dart';
-//import 'resident_message_page.dart';
 import 'resident_chat_page.dart';
-
-/*Future<void> saveUserFcmToken() async {
-  final fcm = FirebaseMessaging.instance;
-  final token = await fcm.getToken();
-  debugPrint("🔑 FCM Token: $token");
-
-  final supabase = Supabase.instance.client;
-  final user = supabase.auth.currentUser;
-  if (user != null && token != null) {
-    await supabase
-        .from('users')
-        .update({'fcm_token': token})
-        .eq('auth_id', user.id);
-  }
-  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-    final uid = supabase.auth.currentUser?.id;
-    if (newToken != null && uid != null) {
-      await supabase.from('users').update({'fcm_token': newToken}).eq('auth_id', uid);
-    }
-  });
-}*/
-
 
 class ResidentHome extends StatefulWidget {
   const ResidentHome({super.key});
@@ -86,15 +63,7 @@ class _ResidentHomeState extends State<ResidentHome> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context);
-
-    /*final user = supabase.auth.currentUser!;
-    final residentData = await supabase
-        .from('users')
-        .select('*')
-        .eq('auth_id', user.id)
-        .single();*/
-
-    // ✅ If resident data is still loading, show loader
+    //  If resident data is still loading, show loader
     if (resident == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -115,7 +84,7 @@ class _ResidentHomeState extends State<ResidentHome> {
         backgroundColor: Colors.white, // light gray background
         foregroundColor: Colors.white, // deep blue text/icons
         elevation: 0, // flat look
-        centerTitle: true, // ✅ centers the title text
+        centerTitle: true, // centers the title text
         title: const Text(
           'Resident Dashboard',
           style: TextStyle(
@@ -135,7 +104,7 @@ class _ResidentHomeState extends State<ResidentHome> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(
-            'assets/icon/icon.png', // 👈 ensure this exists
+            'assets/icon/icon.png', //  ensure this exists
             fit: BoxFit.contain,
           ),
         ),
@@ -199,7 +168,7 @@ class _ResidentHomeState extends State<ResidentHome> {
   }
 }
 
-// 🏠 HOME TAB CONTENT
+//  HOME TAB CONTENT
 class _HomeTab extends StatelessWidget {
   final AuthService auth;
 
@@ -226,7 +195,7 @@ class _HomeTab extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        // ✅ Centered "Notice" Title
+        //  Centered "Notice" Title
         const Text(
           "Notice",
           //textAlign: TextAlign.center,
@@ -239,7 +208,7 @@ class _HomeTab extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        // ✅ Notices List
+        //  Notices List
         Expanded(
           child: StreamBuilder<List<Map<String, dynamic>>>(
             stream: DBService.noticesStream(),
@@ -255,7 +224,7 @@ class _HomeTab extends StatelessWidget {
               return ListView.builder(
                 itemCount: notices.length,
                 itemBuilder: (context, index) {
-                  return NoticeCard(notice: notices[index]); // ✅ Custom Card
+                  return NoticeCard(notice: notices[index]); //  Custom Card
                 },
               );
             },
@@ -265,88 +234,3 @@ class _HomeTab extends StatelessWidget {
     );
   }
 }
-
-
-/*class _HomeTab extends StatelessWidget {
-  final AuthService auth;
-
-  const _HomeTab({required this.auth});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Welcome Header
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(16),
-          color: Colors.blueAccent.withOpacity(0.1),
-          child: Text(
-            'Welcome, ${auth.currentUser?.fullName ?? 'Resident'} 👋',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-
-
-        // Notices
-        Expanded(
-          child: StreamBuilder<List<Map<String, dynamic>>>(
-            stream: DBService.noticesStream(),
-
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No notices available'));
-              }
-
-              final notices = snapshot.data!;
-              return ListView.builder(
-                itemCount: notices.length,
-                itemBuilder: (context, index) {
-                  return NoticeCard(notice: notices[index]); // ✅ Use custom card
-                },
-              );
-            },
-          ),
-        ),
-
-        /*Expanded(
-          child: StreamBuilder<List<Map<String, dynamic>>>(
-            stream: DBService.noticesStream(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No notices available'));
-              }
-
-              final notices = snapshot.data!;
-              return ListView.builder(
-                itemCount: notices.length,
-                itemBuilder: (context, index) {
-                  final n = notices[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
-                    child: ListTile(
-                      title: Text(n['title'] ?? 'No Title'),
-                      subtitle: Text(n['body'] ?? ''),
-                      leading: const Icon(Icons.message_rounded,
-                          color: Colors.indigoAccent),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-        ),*/
-      ],
-    );
-  }
-}*/
