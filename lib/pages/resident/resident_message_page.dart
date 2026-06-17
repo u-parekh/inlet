@@ -41,17 +41,6 @@ class _ResidentMessagePageState extends State<ResidentMessagePage> {
     return supabase.storage.from('message').getPublicUrl(fileName);
   }
 
-  /*Future<String?> uploadImage() async {
-    if (selectedImage == null) return null;
-    final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
-    final upload = await supabase.storage.from('message').upload(fileName, selectedImage!);
-    return supabase.storage.from('message').getPublicUrl(fileName);
-    /*final upload = await supabase.storage
-        .from('your_bucket_name')
-        .upload(fileName, selectedImage!);
-    return supabase.storage.from('your_bucket_name').getPublicUrl(fileName);*/
-  }*/
-
   Future<void> sendMessage() async {
     if (messageController.text.trim().isEmpty) return;
     final imageUrl = await uploadImage();
