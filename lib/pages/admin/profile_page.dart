@@ -92,7 +92,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
           backgroundColor: Colors.white, // light gray background
           foregroundColor: Colors.white, // deep blue text/icons
           elevation:0, // flat look
-          centerTitle: true, // ✅ centers the title text
+          centerTitle: true, //  centers the title text
           title: const Text(
             'Admin Profile',
             style: TextStyle(
@@ -106,7 +106,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              'assets/icon/icon.png', // 👈 ensure this exists
+              'assets/icon/icon.png', //  ensure this exists
               fit: BoxFit.contain,
             ),
           ),
