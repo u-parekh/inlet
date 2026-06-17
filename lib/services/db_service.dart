@@ -1,4 +1,3 @@
-//import 'package:supabase_flutter/supabase_flutter.dart';
 import '../supabase_client.dart';
 
 class DBService {
@@ -28,15 +27,6 @@ class DBService {
         'resident_auth_id', residentAuthId) // ✅ use filter instead of : syntax
         .order('created_at', ascending: false);
   }
-
-  /*static Stream<List<Map<String, dynamic>>> visitorStreamForResident(String residentAuthId) {
-    return client
-        .from('visitors:resident_auth_id=eq.$residentAuthId')
-        .stream(primaryKey: ['id'])
-        .order('created_at', ascending: false)
-        //.execute()
-        .map((e) => List<Map<String,dynamic>>.from(e as List));
-  }*/
 
   // create visitor
   static Future<void> createVisitor(Map<String, dynamic> visitor) async {
@@ -120,11 +110,6 @@ class DBService {
         .map((e) => List<Map<String, dynamic>>.from(e as List));
   }
 
-  // notices stream
-  /*static Stream<List<Map<String, dynamic>>> noticesStream() {
-    return client.from('notices').stream(primaryKey: ['id']).order('created_at', ascending: false).execute()
-        .map((e) => List<Map<String,dynamic>>.from(e as List));
-  }*/
   static Stream<List<Map<String, dynamic>>> noticesStream() {
     return client
         .from('notice')
