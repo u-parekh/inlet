@@ -22,19 +22,6 @@ Future<void> saveUserFcmToken() async {
         .eq('auth_id', user.id);
   }
 
-
-/*Future<void> saveFcmTokenForCurrentUser() async {
-  final fcm = FirebaseMessaging.instance;
-  final permission = await fcm.requestPermission();
-  if (permission.authorizationStatus == AuthorizationStatus.denied) return;
-
-  final token = await fcm.getToken();
-  final userId = supabase.auth.currentUser?.id;
-  if (token != null && userId != null) {
-    // update users table where auth_id = userId
-    await supabase.from('users').update({'fcm_token': token}).eq('auth_id', userId);
-  }*/
-
   FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
     final uid = supabase.auth.currentUser?.id;
     if (newToken != null && uid != null) {
@@ -73,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(
-            'assets/icon/icon.png', // 👈 Ensure your icon path is valid
+            'assets/icon/icon.png', //  Ensure your icon path is valid
             fit: BoxFit.contain,
           ),
         ),
@@ -120,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 24),
 
-                  // 👤 Full Name
+                  //  Full Name
                   TextFormField(
                     decoration: _inputDecoration("Full Name", Icons.person_outline),
                     onSaved: (v) => _fullName = v ?? '',
@@ -128,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 📧 Email
+                  //  Email
                   TextFormField(
                     decoration: _inputDecoration("Email", Icons.email_outlined),
                     onSaved: (v) => _email = v ?? '',
@@ -136,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 🔒 Password
+                  //  Password
                   TextFormField(
                     obscureText: true,
                     decoration: _inputDecoration("Password", Icons.lock_outline),
@@ -145,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 📞 Phone
+                  //  Phone
                   TextFormField(
                     decoration: _inputDecoration("Phone Number", Icons.phone_outlined),
                     onSaved: (v) => _phone = v ?? '',
@@ -153,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 🏢 Block
+                  //  Block
                   TextFormField(
                     decoration: _inputDecoration("Block Number/House Number", Icons.apartment_outlined),
                     onSaved: (v) => _block = v ?? '',
@@ -161,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 🏠 Flat
+                  //  Flat
                   TextFormField(
                     decoration: _inputDecoration("Flat Name/Society Name", Icons.home_outlined),
                     onSaved: (v) => _flat = v ?? '',
@@ -169,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 👮 Role Dropdown
+                  //  Role Dropdown
                   DropdownButtonFormField<String>(
                     initialValue: _role,
                     decoration: InputDecoration(
@@ -190,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 24),
 
-                  // 🔘 Register Button
+                  //  Register Button
                   SizedBox(
                     width: double.infinity,
                     height: 48,
@@ -280,149 +267,3 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? _required(String? v) => (v == null || v.isEmpty) ? 'Required' : null;
 }
-
-// lib/pages/register_page.dart
-/*import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../services/auth_service.dart';
-import 'check_email_page.dart';
-
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
-  String _fullName = '', _email = '', _password = '', _phone = '', _block = '', _flat = '', _role = 'Resident';
-  bool _loading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen: false);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(decoration: const InputDecoration(labelText: 'Full Name'), onSaved: (v) => _fullName = v ?? '', validator: _required),
-              TextFormField(decoration: const InputDecoration(labelText: 'Email'), onSaved: (v) => _email = v ?? '', validator: _required),
-              TextFormField(obscureText: true, decoration: const InputDecoration(labelText: 'Password'), onSaved: (v) => _password = v ?? '', validator: _required),
-              TextFormField(decoration: const InputDecoration(labelText: 'Phone Number'), onSaved: (v) => _phone = v ?? '', validator: _required),
-              TextFormField(decoration: const InputDecoration(labelText: 'Block Number'), onSaved: (v) => _block = v ?? '', validator: _required),
-              TextFormField(decoration: const InputDecoration(labelText: 'Flat Name'), onSaved: (v) => _flat = v ?? '', validator: _required),
-              DropdownButtonFormField<String>(
-                initialValue: _role,
-                decoration: const InputDecoration(labelText: 'Role'),
-                items: const [
-                  DropdownMenuItem(value: 'Resident', child: Text('Resident')),
-                  DropdownMenuItem(value: 'Admin', child: Text('Admin')),
-                  DropdownMenuItem(value: 'Guard', child: Text('Guard')),
-                ],
-                onChanged: (v) => setState(() => _role = v ?? 'Resident'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _loading
-                    ? null
-                    : () async {
-                  if (!_formKey.currentState!.validate()) return;
-                  _formKey.currentState!.save();
-                  setState(() => _loading = true);
-                  final err = await auth.register(
-                    fullName: _fullName,
-                    email: _email,
-                    password: _password,
-                    phone: _phone,
-                    block: _block,
-                    flat: _flat,
-                    role: _role,
-                  );
-                  setState(() => _loading = false);
-                  if (err != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
-                  } else {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => CheckEmailPage(email: _email)));
-                  }
-                },
-                child: _loading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Register'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String? _required(String? v) => (v == null || v.isEmpty) ? 'Required' : null;
-}*/
-
-/*import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../services/auth_service.dart';
-
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-  @override State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
-  String fullName='', email='', password='', phone='', block='', flat='', role='Resident';
-  bool _loading=false;
-
-  @override
-  Widget build(BuildContext context) {
-    final auth = Provider.of<AuthService>(context, listen:false);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(children: [
-            TextFormField(decoration: const InputDecoration(labelText: 'Full Name'), onChanged: (v)=>fullName=v),
-            TextFormField(decoration: const InputDecoration(labelText: 'Email'), onChanged: (v)=>email=v),
-            TextFormField(obscureText: true, decoration: const InputDecoration(labelText: 'Password'), onChanged: (v)=>password=v),
-            TextFormField(decoration: const InputDecoration(labelText: 'Phone Number'), onChanged: (v)=>phone=v),
-            TextFormField(decoration: const InputDecoration(labelText: 'Block No'), onChanged: (v)=>block=v),
-            TextFormField(decoration: const InputDecoration(labelText: 'Flat No'), onChanged: (v)=>flat=v),
-            DropdownButtonFormField<String>(
-              initialValue: role,
-              items: const [
-                DropdownMenuItem(value:'Resident', child: Text('Resident')),
-                DropdownMenuItem(value:'Admin', child: Text('Admin')),
-                DropdownMenuItem(value:'Guard', child: Text('Guard')),
-              ],
-              onChanged: (v)=> role = v ?? 'Resident',
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(onPressed: _loading ? null : () async {
-              setState(()=>_loading=true);
-              final err = await auth.register(
-                  fullName: fullName, email:email, password:password, phone:phone, block:block, flat:flat, role:role
-              );
-              setState(()=>_loading=false);
-              if (err != null) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
-                return;
-              }
-              if (!context.mounted) return;
-              Navigator.pop(context);
-            }, child: _loading ? const CircularProgressIndicator(color: Colors.white) : const Text('Register'))
-          ]),
-        ),
-      ),
-    );
-  }
-}*/
-// lib/pages/register_page.dart
