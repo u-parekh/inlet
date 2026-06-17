@@ -37,13 +37,6 @@ class _AdminMainPageState extends State<AdminMainPage> {
     });
   }
 
-  /*final _pages = const [
-    AdminHomePage(),
-    NoticePage(),
-
-    AdminProfilePage(),
-  ];*/
-
   @override
   Widget build(BuildContext context) {
     if (resident == null) {
@@ -157,7 +150,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         backgroundColor: Colors.white, // light gray background
         foregroundColor: Colors.white, // deep blue text/icons
         elevation: 0, // flat look
-        centerTitle: true, // ✅ centers the title text
+        centerTitle: true, //  centers the title text
         title: const Text(
           'Admin Panel',
           style: TextStyle(
@@ -180,7 +173,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(
-            'assets/icon/icon.png', // 👈 ensure this exists
+            'assets/icon/icon.png', //  ensure this exists
             fit: BoxFit.contain,
           ),
         ),
@@ -211,68 +204,3 @@ class _AdminHomePageState extends State<AdminHomePage> {
 }
 
 
-
-
-/*import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../services/auth_service.dart';
-import '../../services/logout_helper.dart';
-import '../../services/db_service.dart';
-
-class AdminPanel extends StatelessWidget {
-  const AdminPanel({super.key});
-  @override
-  Widget build(BuildContext context) {
-    final supabase = Supabase.instance.client;
-    final auth = Provider.of<AuthService>(context);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Admin Panel'), actions: [IconButton(icon: const Icon(Icons.logout), onPressed: ()=>LogoutHelper.logout(context))]),
-      body: Column(children: [
-        ListTile(title: Text('Admin: ${auth.currentUser?.fullName ?? ''}')),
-        Expanded(child: StreamBuilder<List<Map<String,dynamic>>>(
-          stream: DBService.noticesStream(),
-          builder: (c,s){ if (!s.hasData) return const Center(child:CircularProgressIndicator());
-          final list = s.data!;
-          return ListView.builder(itemCount: list.length, itemBuilder: (ctx,i){
-            final n = list[i];
-            return Card(child: ListTile(title: Text(n['title'] ?? ''), subtitle: Text(n['body'] ?? '')));
-          });
-          },
-        )),
-      ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: ()=> showDialog(context: context, builder: (ctx){
-          final titleCtl = TextEditingController();
-          final bodyCtl = TextEditingController();
-          String target = 'all';
-          return AlertDialog(
-            title: const Text('Create Notice'),
-            content: Column(mainAxisSize: MainAxisSize.min, children: [
-              TextField(controller: titleCtl, decoration: const InputDecoration(labelText:'Title')),
-              TextField(controller: bodyCtl, decoration: const InputDecoration(labelText:'Body')),
-              DropdownButton<String>(value: target, items: const [
-                DropdownMenuItem(value:'all', child: Text('All')),
-                DropdownMenuItem(value:'guards', child: Text('Guards')),
-                DropdownMenuItem(value:'residents', child: Text('Residents')),
-              ], onChanged: (v)=> target = v ?? 'all'),
-            ]),
-            actions: [
-              TextButton(onPressed: ()=> Navigator.pop(ctx), child: const Text('Cancel')),
-              ElevatedButton(onPressed: () async {
-                await supabase.from('notices').insert({
-                  'title': titleCtl.text.trim(),
-                  'body': bodyCtl.text.trim(),
-                  'created_by': auth.currentUser?.authId,
-                  'target': target
-                });
-                Navigator.pop(ctx);
-              }, child: const Text('Post'))
-            ],
-          );
-        }),
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}*/
