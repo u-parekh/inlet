@@ -22,9 +22,9 @@ class DBService {
       String residentAuthId) {
     return client
         .from('visitors')
-        .stream(primaryKey: ['id']) // ✅ required in new SDK
+        .stream(primaryKey: ['id']) //  required in new SDK
         .eq(
-        'resident_auth_id', residentAuthId) // ✅ use filter instead of : syntax
+        'resident_auth_id', residentAuthId) //  use filter instead of : syntax
         .order('created_at', ascending: false);
   }
 
@@ -113,7 +113,7 @@ class DBService {
   static Stream<List<Map<String, dynamic>>> noticesStream() {
     return client
         .from('notice')
-        .stream(primaryKey: ['id']) // ✅ required in new SDK
+        .stream(primaryKey: ['id']) //  required in new SDK
         .order('created_at', ascending: false)
         .map((event) => List<Map<String, dynamic>>.from(event as List));
   }
