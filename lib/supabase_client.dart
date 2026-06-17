@@ -8,8 +8,6 @@ class Supa {
     await Supabase.initialize(
       url: _url,
       anonKey: _anonKey,
-      //primaryKey: 'secure_key_123',
-      //authCallbackUrlHostname: 'login-callback',
       debug: true,
     );
   }
