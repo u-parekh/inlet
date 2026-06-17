@@ -1,122 +1,3 @@
-/*import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../supabase_client.dart';
-import '../models/app_user.dart';
-import 'db_service.dart';
-
-class AuthService extends ChangeNotifier {
-  final client = Supa.client;
-  AppUser? currentUser;
-  bool isLoading = true;
-
-  AuthService() {
-    _init();
-  }
-
-  Future<void> _init() async {
-    final session = client.auth.currentSession;
-    if (session != null) {
-      await loadProfile();
-    }
-    isLoading = false;
-    notifyListeners();
-  }
-
-  Future<String?> register({
-    required String fullName,
-    required String email,
-    required String password,
-    String? phone,
-    String? block,
-    String? flat,
-    required String role,
-  }) async {
-    try {
-      final res = await client.auth.signUp(email: email, password: password);
-      final user = res.user;
-      if (user == null) return 'Sign up failed';
-
-      final authId = user.id;
-      // Create profile in DB
-      await DBService.createUser({
-        'auth_id': authId,
-        'full_name': fullName,
-        'email': email,
-        'password':password,
-        'phone': phone,
-        'block': block,
-        'flat': flat,
-        'role': role,
-      });
-
-      return null;
-    } on AuthException catch (e) {
-      return e.message;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  /*Future<String?> login(String email, String password) async {
-    try {
-      final res = await client.auth.signInWithPassword(email: email, password: password);
-      final user = res.user;
-      if (user == null) return 'Login failed';
-      await loadProfile();
-      return null;
-    } on AuthException catch (e) {
-      return e.message;
-    } catch (e) {
-      return e.toString();
-    }
-  }*/
-  // Login
-  Future<String?> login(String email, String password) async {
-    try {
-      final res = await client.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
-      if (res.user == null) return 'Login failed. Try again.';
-      return null;
-    } on AuthException catch (e) {
-      // 🧩 Detect “email not confirmed” type error
-      if (e.message.toLowerCase().contains('email not confirmed')) {
-        return 'Please confirm your email before logging in.';
-      }
-      return e.message;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-  // Resend confirmation email
-  /*Future<void> resendConfirmation(String email) async {
-    await client.auth.resend(
-      type: ResendType.signup,
-      email: email,
-    );
-  }*/
-
-  Future<void> loadProfile() async {
-    final supaUser = client.auth.currentUser;
-    if (supaUser == null) {
-      currentUser = null;
-      notifyListeners();
-      return;
-    }
-    final m = await DBService.getUserByAuthId(supaUser.id);
-    if (m != null) currentUser = AppUser.fromMap(m);
-    notifyListeners();
-  }
-
-  Future<void> logout() async {
-    await client.auth.signOut();
-    currentUser = null;
-    notifyListeners();
-  }
-}*/
-
-// lib/services/auth_service.dart
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -159,7 +40,7 @@ class AuthService extends ChangeNotifier {
   final _supabase = Supabase.instance.client;
   AppUser? currentUser;
 
-  // ✅ Login
+  //  Login
   Future<String?> login(String email, String password) async {
     try {
       await _supabase.auth.signInWithPassword(email: email, password: password);
@@ -172,7 +53,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  // ✅ Register (creates auth user + DB profile)
+  //  Register (creates auth user + DB profile)
   Future<String?> register({
     required String fullName,
     required String email,
@@ -207,7 +88,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  // ✅ Load profile after login
+  //  Load profile after login
   Future<void> loadProfile() async {
     final user = _supabase.auth.currentUser;
     if (user == null) return;
@@ -235,7 +116,7 @@ class AuthService extends ChangeNotifier {
   }
 
 
-  // ✅ Logout
+  //  Logout
   Future<void> logout() async {
     await _supabase.auth.signOut();
     currentUser = null;
