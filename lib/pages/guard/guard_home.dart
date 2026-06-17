@@ -57,7 +57,7 @@ class _GuardHomeState extends State<GuardHome> {
           backgroundColor: Colors.white, // light gray background
           foregroundColor: Colors.white, // deep blue text/icons
           elevation: 0, // flat look
-          centerTitle: true, // ✅ centers the title text
+          centerTitle: true, //  centers the title text
           title: const Text(
             'Guard Panel',
             style: TextStyle(
@@ -72,7 +72,7 @@ class _GuardHomeState extends State<GuardHome> {
           leading: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Image.asset(
-        'assets/icon/icon.png', // 👈 ensure this exists
+        'assets/icon/icon.png', //  ensure this exists
         fit: BoxFit.contain,
       ),
     ),
@@ -109,12 +109,6 @@ class _GuardHomeState extends State<GuardHome> {
                       : const Icon(Icons.people_outlined),
                   label: 'Visitors',
                 ),
-               /* NavigationDestination(
-                  icon: _selectedIndex == 1
-                      ? Lottie.asset('assets/lottie/Bills icon animation.json', height: 33 )
-                      : const Icon(Icons.message_outlined),
-                  label: 'Messages',
-                ),*/
                 NavigationDestination(
                   icon: _selectedIndex == 1
                       ? Lottie.asset('assets/lottie/Bills icon animation.json', height: 33 )
@@ -138,14 +132,7 @@ class _GuardHomeState extends State<GuardHome> {
           ),
         ),
       ),
-     /* bottomNavigationBar: BottomNavigationBar(currentIndex: _idx, onTap: (i)=> setState(()=>_idx=i), items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Visitors'),
-        BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-        BottomNavigationBarItem(icon: Icon(Icons.announcement), label: 'Notices'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      ]
-      ),*/
-
+    
     );
   }
 }
